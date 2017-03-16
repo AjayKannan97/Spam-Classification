@@ -89,12 +89,26 @@ The class diagram of the spam classification system is shown in the figure. This
 
 \section{COMPLEXITY ANALYSIS}
 \subsection{TIME COMPLEXITY}
-The Time complexity of each module is shown in the table below.
+The Time complexity of each module is shown in the table 4.1.
 
-\begin{figure}[h]
-\centering\includegraphics[width=1.0\linewidth]{complex.PNG}
+\begin{table}[]
+\centering
 \caption{Time Complexity}
-\end{figure}
+\label{my-label}
+\begin{tabular}{|l|l|l|}
+\hline
+\textit{\textbf{Sno}} & \textbf{Module}                       & \textbf{Complexity}    \\ \hline
+1                     & TF*IDF Vectorizer                     & O(n\textasciicircum 2) \\ \hline
+2                     & Single Value Decomposition            & O(n\textasciicircum 3) \\ \hline
+3                     & Reduction of Term by Document Matrix  & O(n\textasciicircum 2) \\ \hline
+4                     & Creating the Data Set                 & O(n)                   \\ \hline
+5                     & Neural Network - Training and Testing & O(n\textasciicircum 3) \\ \hline
+\end{tabular}
+\end{table}
+%\begin{figure}[h]
+%\centering\includegraphics[width=1.0\linewidth]{complex.PNG}
+%\caption{Time Complexity}
+%\end{figure}
 
 \subsection{COMPLEXITY OF THE PROJECT}
 $1)$ The complexity of the system lies in dealing with words that are not present in the training set.

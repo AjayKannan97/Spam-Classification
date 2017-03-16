@@ -164,14 +164,33 @@ The major disadvantage of this metric is that for a biased dataset, even a trivi
 Table 6.1 shows the distribution of our test set. The first row contains the True Positive (TP) and False Negative (FN) values respectively. The second row contains False Positive (FP) and True Negative (TN) values respectively.
 
 
-\begin{figure}[h]
-\centering\includegraphics[width=0.8\linewidth]{score.png}
-\caption{Score wise analysis}
-\end{figure}
+\begin{table}[ht]
+\centering
+\caption{Overall Classification of a test-batch}
+\label{my-label}
+\begin{tabular}{|l|l|l|}
+\hline
+\textit{\textbf{Overall Classification}} & \textbf{Positive} & \textbf{Negative} \\ \hline
+\textit{\textbf{Positive}}               & 203               & 38                \\ \hline
+\textit{\textbf{Negative}}               & 37                & 10                \\ \hline
+\end{tabular}
+\end{table}
+\\
+$Precision=(203/(203+37))=0.8458$
+\\
+$Recall=(203/(203+38))=0.8423$
+\\
+$F-Measure=((2+203)/(2+203+37+38))=0.844$
+\\
+$Accuracy=((203+10)/(203+37+38+10))=0.7473$
+%\begin{figure}[h]
+%\centering\includegraphics[width=0.8\linewidth]{score.png}
+%\caption{Score wise analysis}
+%\end{figure}
 
 
 \section{DOMAIN WISE ANALYSIS}
-The test dataset contains data related to three main domains – Personal, Work and Academia. Table 6.2 shows the classification spit up of the different domains. Using the formulae mentioned above, the domain-wise metrics can be obtained.
+The test dataset contains data related to three main domains – Personal, Work and Academia. Table 6.2 shows the classification split up of the different domains. Using the formulae mentioned above, the domain-wise metrics can be obtained.
 
 %\begin{tabular}{|l|l|l|l|l|l|l|}
 %\hline
@@ -187,10 +206,46 @@ The test dataset contains data related to three main domains – Personal, Work 
 %\hline
 %\end{tabular}
 
-\begin{figure}[h]
-\centering\includegraphics[width=0.8\linewidth]{table.PNG}
-\caption{Domain Wise Analysis}
-\end{figure}
+\begin{table}[]
+\centering
+\caption{Personal Domain -Spam classification of personal mails}
+\label{my-label}
+\begin{tabular}{|l|l|l|}
+\hline
+\textit{\textbf{Personal}} & Positive & Negative \\ \hline
+Positive                   & 68       & 12       \\ \hline
+Negative                   & 11       & 0        \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Work Domain -Spam classification of work mails}
+\label{my-label}
+\begin{tabular}{|l|l|l|}
+\hline
+\textit{\textbf{Work}} & Positive & Negative \\ \hline
+Positive                   & 67       & 13       \\ \hline
+Negative                   & 12       & 5        \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Academia Domain -Spam classification of academia mails}
+\label{my-label}
+\begin{tabular}{|l|l|l|}
+\hline
+\textit{\textbf{Academia}} & Positive & Negative \\ \hline
+Positive                   & 68       & 13       \\ \hline
+Negative                   & 14       & 5        \\ \hline
+\end{tabular}
+\end{table}
+
+%\begin{figure}[h]
+%\centering\includegraphics[width=0.8\linewidth]{table.PNG}
+%\caption{Domain Wise Analysis}
+%\end{figure}
 
 
 The domain wise distribution of evaluation metrics is shown below.

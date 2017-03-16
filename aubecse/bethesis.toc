@@ -1,6 +1,6 @@
 \contentsline {chapter}{ABSTRACT -- ENGLISH}{iii}
-\contentsline {chapter}{LIST OF FIGURES}{vii}
-\contentsline {chapter}{LIST OF TABLES}{viii}
+\contentsline {chapter}{LIST OF FIGURES}{ix}
+\contentsline {chapter}{LIST OF TABLES}{x}
 \contentsline {chapter}{\chapternumberline {1}INTRODUCTION}{1}
 \contentsline {section}{\numberline {1.1}PROBLEM DOMAIN}{1}
 \contentsline {section}{\numberline {1.2}PROBLEM STATEMENT}{2}
@@ -79,7 +79,47 @@
 \contentsline {subsection}{\numberline {6.4.4}ACCURACY}{28}
 \contentsline {section}{\numberline {6.5}SCORES OBTAINED AND DISCUSSION}{28}
 \contentsline {section}{\numberline {6.6}DOMAIN WISE ANALYSIS}{28}
-\contentsline {chapter}{\chapternumberline {7}CONCLUSIONS}{30}
-\contentsline {section}{\numberline {7.1}SUMMARY}{30}
-\contentsline {section}{\numberline {7.2}CRITICISMS}{30}
-\contentsline {section}{\numberline {7.3}FUTURE WORK}{31}
+\contentsline {chapter}{\chapternumberline {7}CONCLUSIONS}{31}
+\contentsline {section}{\numberline {7.1}SUMMARY}{31}
+\contentsline {section}{\numberline {7.2}CRITICISMS}{31}
+\contentsline {section}{\numberline {7.3}FUTURE WORK}{32}
+\contentsline {appendix}{\chapternumberline {A}Test Cases for Each Module}{33}
+\contentsline {section}{\numberline {A.1}SNOWBALL STEMMER}{33}
+\contentsline {subsection}{\numberline {A.1.1}Test Pre-requisites}{33}
+\contentsline {section}{\numberline {A.2}Description}{33}
+\contentsline {section}{\numberline {A.3}TEST CASES}{33}
+\contentsline {subsection}{\numberline {A.3.1}TC ID: 01}{33}
+\contentsline {subsubsection}{Input}{33}
+\contentsline {subsubsection}{Expected Output}{33}
+\contentsline {subsection}{\numberline {A.3.2}TC ID: 02}{34}
+\contentsline {subsubsection}{Input}{34}
+\contentsline {subsubsection}{Expected Output}{34}
+\contentsline {section}{\numberline {A.4}TOKENIZER}{34}
+\contentsline {subsection}{\numberline {A.4.1}Test Pre-requisite}{34}
+\contentsline {subsection}{\numberline {A.4.2}Description}{34}
+\contentsline {subsection}{\numberline {A.4.3}Test Cases}{34}
+\contentsline {subsubsection}{TC ID: 01}{34}
+\contentsline {subsubsection}{TC ID: 02}{34}
+\contentsline {section}{\numberline {A.5}TF-IDF VECTORIZER}{35}
+\contentsline {subsection}{\numberline {A.5.1}Test Pre-requisite}{35}
+\contentsline {subsection}{\numberline {A.5.2}Description}{35}
+\contentsline {subsection}{\numberline {A.5.3}Test Cases}{35}
+\contentsline {subsubsection}{TC ID: 01}{35}
+\contentsline {section}{\numberline {A.6}SINGLE VALUE DECOMPOSITION}{35}
+\contentsline {subsection}{\numberline {A.6.1}Test Pre-requisite}{35}
+\contentsline {subsection}{\numberline {A.6.2}Description}{35}
+\contentsline {subsection}{\numberline {A.6.3}Test Cases}{35}
+\contentsline {subsubsection}{TC ID: 01}{35}
+\contentsline {section}{\numberline {A.7}MODIFIED DATASET CREATION}{36}
+\contentsline {subsection}{\numberline {A.7.1}Test Pre-requisite}{36}
+\contentsline {subsection}{\numberline {A.7.2}Description}{36}
+\contentsline {subsection}{\numberline {A.7.3}Test Cases}{36}
+\contentsline {subsubsection}{TC ID: 01}{36}
+\contentsline {section}{\numberline {A.8}NEURAL NETWORK FITTING AND CLASSIFICATION}{36}
+\contentsline {subsection}{\numberline {A.8.1}Test Pre-requisite}{36}
+\contentsline {subsection}{\numberline {A.8.2}Description}{36}
+\contentsline {subsection}{\numberline {A.8.3}Test Cases}{36}
+\contentsline {subsubsection}{TC ID: 01}{36}
+\contentsline {subsubsection}{TC ID: 02}{37}
+\contentsline {subsubsection}{TC ID: 03}{37}
+\contentsline {subsubsection}{TC ID: 04}{37}
