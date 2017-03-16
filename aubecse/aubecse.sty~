@@ -1,0 +1,438 @@
+%%%% From The Memoir Class, Chapter 20, "An example thesis design"
+%%%% file aubecse.sty
+%%%% Edited by Joseph Hosanna Sakaya for AU's thesis specifications. 
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{aubecse}[2013/05/18 v0.1 AU BE CSE thesis]
+
+%% Only works with the memoir class!!!!!!!!!!!!!!!
+\@ifclassloaded{memoir}{\let\endpwau\relax}{\let\endpwau\endinput
+\PackageError{aubecse}{The aubecse package only works with the memoir class}%
+{\@ehd}}
+
+\usepackage{url}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage{acronym}
+\usepackage[nonumberlist,toc]{glossaries}
+\usepackage{glossary-longragged}
+\usepackage{enumitem}
+
+\let\@afterindentfalse\@afterindenttrue
+\@afterindenttrue
+
+\urlstyle{same}
+\makeglossaries
+%\renewcommand*{\glsnamefont}[1]{{\bfseries#1}}
+\setlist{nolistsep}
+\graphicspath{{Figures/}}
+\setverbatimfont{\normalfont\rmfamily}% make verbatims use the body font
+\renewcommand*{\foottextfont}{\normalfont\normalsize}
+\maxtocdepth{subsection} % put 3 levels into the ToC
+% To enable spacing to be changed if neccesary by the user
+\newcommand*{\setauspacing}[1]{%
+\let\AuSpacing#1
+\AuSpacing}
+\setauspacing{\SingleSpacing \setSingleSpace{1.1}}
+\newcommand*{\auSpacing}{
+    \setSpacing{1.356}%
+}
+% left, right margins and textwidth
+%\setlrmarginsandblock{1.5in}{0.95in}{*}
+\setlrmarginsandblock{40mm}{25mm}{*}
+\newlength{\linespace}
+\setlength{\linespace}{\baselineskip} % current equivalent of \onelineskip
+\setlength{\headheight}{\onelineskip}
+\setlength{\headsep}{\linespace}
+\addtolength{\headsep}{-\topskip}
+\setlength{\uppermargin}{25mm} 
+\addtolength{\uppermargin}{\headheight}
+\addtolength{\uppermargin}{\headsep}
+
+%% and for the bottom
+\setlength{\lowermargin}{25mm} 
+\setlength{\textheight}{\paperheight}
+
+\addtolength{\textheight}{-\uppermargin}
+\addtolength{\textheight}{-\lowermargin}
+%\addtolength{\textheight}{-0.1in}
+
+%% footnote settings
+\setlength{\footskip}{\onelineskip}
+\setlength{\footnotesep}{\onelineskip}
+
+%% the fiddle lengths (..ta.. for title/approval page, others for prelims)
+\newlength{\toptafiddle} \setlength{\toptafiddle}{2\linespace}
+\newlength{\bottafiddle} \setlength{\bottafiddle}{0pt}
+\newlength{\topfiddle}
+\setlength{\topfiddle}{\toptafiddle}
+\newlength{\botfiddle}
+\setlength{\botfiddle}{\onelineskip}
+
+\setlength{\parindent}{2em}
+\checkandfixthelayout[nearest]
+
+\newcommand*{\addtotextheight}[1]{%
+\twocolumn
+\addtolength{\textheight}{#1}%
+\onecolumn}
+ 
+%% for main body, bottom of text at 1in, footer below
+%% top of header at 1in, first text line double spaced
+%% below base of header
+
+%%%% pagestyles
+%% the main text
+\makepagestyle{au}
+\makeevenhead{au}{\thepage}{}{}
+\makeoddhead{au}{}{}{\thepage}
+%% for continuation pages of the ToC, LoF, LoT
+\makepagestyle{toc}
+\makeevenfoot{toc}{}{\thepage}{}
+\makeoddfoot{toc}{}{\thepage}{}
+\makeevenhead{toc}{}{}{}
+\makeoddhead{toc}{}{}{}
+\makepagestyle{lof}
+\makeevenfoot{lof}{}{\thepage}{}
+\makeoddfoot{lof}{}{\thepage}{}
+\makeevenhead{lof}{Figure}{}{Page}
+\makeoddhead{lof}{Figure}{}{Page}
+\makepagestyle{lot}
+\makeevenfoot{lot}{}{\thepage}{}
+\makeoddfoot{lot}{}{\thepage}{}
+\makeevenhead{lot}{Table}{}{Page}
+\makeoddhead{lot}{Table}{}{Page}
+
+%%%% The LoF
+\renewcommand{\listfigurename}{LIST OF FIGURES}
+\addtodef{\listoffigures}{\clearpage\pagestyle{lof}}{}
+
+\renewcommand*{\lofheadstart}{\vspace*{-\topfiddle}}
+\renewcommand*{\afterloftitle}{\thispagestyle{plain}%
+\par\nobreak \par\nobreak}
+
+%%% The LoT
+\renewcommand{\listtablename}{LIST OF TABLES}
+\addtodef{\listoftables}{\clearpage\pagestyle{lot}}{}
+\renewcommand*{\lotheadstart}{\vspace*{-\topfiddle}}
+\renewcommand*{\afterlottitle}{\thispagestyle{plain}%
+\par\nobreak \par\nobreak}
+
+%%%% Do the ToC
+\renewcommand*{\insertchapterspace}{5pt}
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\addtodef{\tableofcontents}{\clearpage\pagestyle{toc}}{}
+\renewcommand*{\tocheadstart}{\vspace*{-\topfiddle}}
+\renewcommand*{\aftertoctitle}{\thispagestyle{plain}%
+\par\nobreak \mbox{}\hfill{}\par\nobreak}
+
+\renewcommand*{\cftchapterfont}{\normalfont\bfseries\scshape\OnehalfSpacing}
+\renewcommand*{\cftchapterpagefont}{\normalfont}
+\renewcommand*{\cftchapterleader}{%
+\cftchapterfont\cftdotfill{\cftchapterdotsep}}
+\renewcommand*{\cftchapterdotsep}{\cftdotsep}
+%\renewcommand*{\cftsectionfont}{\normalfont\bfseries\scshape\OnehalfSpacing}
+
+%%% no extra space before the entry, or in the LoF/LoT
+\setlength{\cftbeforechapterskip}{0pt plus 0pt}
+\renewcommand*{\insertchapterspace}{}
+
+%% chapter style
+\makechapterstyle{au}{%
+\setlength{\beforechapskip}{0.5\topfiddle}
+\setlength{\midchapskip}{1.0\onelineskip}
+\setlength{\afterchapskip}{1.79\onelineskip}
+\renewcommand*{\chapnamefont}{\normalfont\large\bfseries\MakeUppercase}
+\renewcommand*{\chapnumfont}{\chapnamefont}
+\renewcommand*{\printchapternum}{\centering\chapnumfont \thechapter}
+\renewcommand*{\chaptitlefont}{\normalfont\large\centering\bfseries\MakeUppercase}
+\renewcommand*{\printchapternonum}{}}
+%\aliaspagestyle{chapter}{empty}
+\aliaspagestyle{chapter}{plain}
+
+%% chapter style for appendices, text comes on following page. Don't use this
+\makechapterstyle{auappendix}{%
+\setlength{\beforechapskip}{\topfiddle}
+\setlength{\midchapskip}{1.0\onelineskip}
+\setlength{\afterchapskip}{\onelineskip}
+\renewcommand*{\chapnamefont}{\normalfont}
+\renewcommand*{\chapnumfont}{\chapnamefont}
+\renewcommand*{\printchaptername}{%
+\chapnamefont\MakeUppercase{\@chapapp}}
+\renewcommand*{\printchapternum}{\centering\chapnumfont \thechapter}
+\renewcommand*{\chaptitlefont}{\normalfont\centering}
+\renewcommand*{\printchapternonum}{}
+\renewcommand*{\afterchaptertitle}{\clearpage}}
+
+%%% different chapter style for appendices, (and double spaced)
+\addtodef{\appendix}{}{\chapterstyle{au}\auSpacing}
+
+
+\setsecnumdepth{subsection}
+%%% (subsub)section styles
+\setsecheadstyle{\normalfont\bfseries\MakeUppercase}
+\setbeforesecskip{-0.5\onelineskip}
+\setaftersecskip{0.5\onelineskip}
+\setsubsecheadstyle{\normalfont\bfseries}
+\setbeforesubsecskip{-0.5\onelineskip}
+\setaftersubsecskip{0.5\onelineskip}
+
+
+%% Captions
+\captiontitlefont{\centering\normalfont}% title font
+\precaption{\bfseries\raggedright}% for Caption N
+\captiondelim{\space}% newline
+\captionstyle{\raggedright}% for title
+%\setlength{\belowcaptionskip}{\baselineskip}
+
+
+%% for REFERENCE section
+\renewcommand*{\bibname}{\bfseries REFERENCES}
+\setlength{\bibitemsep}{\onelineskip}
+
+\renewcommand*{\biblistextra}{%
+\setlength{\itemsep}{\bibitemsep}
+\setlength{\labelwidth}{0pt}
+\setlength{\leftmargin}{3em}% hanging indent
+\setlength{\itemindent}{-\leftmargin}}
+
+\renewcommand*{\bibsection}{%
+\AuSpacing
+\chapter*{\bibname}\addcontentsline{toc}{chapter}{\bibname}
+\SingleSpacing}
+
+%% endnotes
+\renewcommand*{\notesname}{NOTES}
+\renewcommand*{\notedivision}{%
+\AuSpacing
+\chapter*{\notesname}
+\addcontentsline{toc}{chapter}{\notesname}
+\SingleSpacing}
+\continuousnotenums
+\renewcommand*{\notenuminnotes}[1]{\textsuperscript{#1}\space}
+\renewcommand{\noteinnotes}[1]{#1\\}
+\renewcommand*{\pagenotesubhead}[3]{}% no subheads
+
+%%% general macro for Abstract, etc., headings
+\newcommand*{\pretoctitle}[1]{{\clearpage\centering
+\vspace*{-\topfiddle} \normalfont\large\bfseries #1  \bigskip \par}}
+%%% Start the ACKNOWLEDGEMENTS
+
+\newcommand{\auacknowledgement}[1]{
+\clearpage
+\thispagestyle{empty}%
+%\phantomsection
+\addcontentsline{toc}{chapter}{ACKNOWLEDGEMENT}
+\pretoctitle{ACKNOWLEDGEMENT}
+\DoubleSpacing
+#1
+
+\bigskip
+
+\noindent
+\ifnum \value{nauthors} = 1
+\hphantom{1mm} \hfill \textbf{ \authorone}
+\fi
+%
+\ifnum \value{nauthors} = 2
+\textbf{ \authorone} \hfill \textbf{ \authortwo}
+\fi
+%
+\ifnum \value{nauthors} = 3
+\textbf{ \authorone} \hfill \textbf{ \authortwo} \hfill \textbf{ \authorthree}
+\fi
+}
+
+%%% Start the ABSTRACT
+\newcommand{\auabstract}[1]{%
+%\addtotextheight{-\botfiddle}%
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{ABSTRACT - ENGLISH}
+\pretoctitle{ABSTRACT}
+\thispagestyle{empty}
+\DoubleSpacing
+#1
+\thispagestyle{empty}
+}
+
+\newcommand{\auabstracttamil}{%
+%\addtotextheight{-\botfiddle}%
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{ABSTRACT - TAMIL}
+\pretoctitle{ABSTRACT}
+\DoubleSpacing
+\thispagestyle{empty}%
+}
+\newcommand{\listofabbr}{%
+%\addtotextheight{-\botfiddle}%
+\clearpage
+\glossarystyle{longragged}
+\renewcommand*{\glsgroupskip}{}
+\renewcommand*{\glsgroupskip}{}% 
+\renewcommand*{\glossaryname}{LIST OF ABBREVIATIONS}
+\setlength{\beforechapskip}{-\topfiddle}
+\renewcommand*{\glspostdescription}{}
+\printglossary
+\setlength{\beforechapskip}{0.5\topfiddle}
+}
+
+\newcommand{\aucertification}{
+\clearpage
+\setcounter{page}{1}
+\addcontentsline{toc}{chapter}{CERTIFICATION}
+\pretoctitle{BONAFIDE CERTIFICATE}
+\sloppypar
+\DoubleSpacing%
+Certified that this project report titled {\bfseries \MakeUppercase\autitle} is the \textit{bonafide} work of
+%
+\ifnum \value{nauthors} = 1
+\MakeUppercase \authorone\ (\regone)
+\fi
+%
+\ifnum \value{nauthors} = 2
+\MakeUppercase \authorone\ (\regone) and \MakeUppercase \authortwo\ (\regtwo)
+\fi
+%
+\ifnum \value{nauthors} = 3
+\MakeUppercase \authorone\ (\regone), \MakeUppercase \authortwo\ (\regtwo) and \MakeUppercase \authorthree\ (\regthree)
+\fi
+%
+who carried out the project work under my supervision, for
+the fulfillment of the requirements for the award of the degree of
+Bachelor of Engineering in Computer Science and Engineering. Certified
+further that to the best of my knowledge, the work reported herein
+does not form part of any other thesis or dissertation on the basis of
+which a degree or an award was conferred on an earlier occasion on
+these or any other candidates.
+
+\vspace{2\baselineskip}
+\OnehalfSpacing%
+\noindent
+\textbf{Place:} Chennai \ \hfill \textbf{\guidename} \\
+\textbf{Date:} \hfill \designation\\
+\hphantom{1mm} \hfill Department of Computer Science and Engineering\\
+\hphantom{1mm}\hfill Anna University, Chennai -- 25
+
+\vfill
+\begin{center}
+COUNTERSIGNED\\
+[3\baselineskip]
+Head of the Department, \\
+Department of Computer Science and Engineering, \\
+Anna University Chennai, \\
+Chennai -- 600025 
+\end{center}
+\thispagestyle{empty}%
+}
+
+
+
+%%%% for the title page and approval page.
+% your title
+\newcommand{\settitle}[1]{\def\autitle{{#1}}}
+% number of students
+\newcounter{nauthors}
+\newcommand{\setnauthors}[1]{\setcounter{nauthors}{#1}}
+% names of students
+\newcommand{\setauthorone}[1]{\def\authorone{#1}}
+\newcommand{\setauthortwo}[1]{\def\authortwo{#1}}
+\newcommand{\setauthorthree}[1]{\def\authorthree{#1}}
+% register numbers of students
+\newcommand{\setregone}[1]{\def\regone{#1}}
+\newcommand{\setregtwo}[1]{\def\regtwo{#1}}
+\newcommand{\setregthree}[1]{\def\regthree{#1}}
+% name of guide
+\newcommand{\setguide}[1]{\def\guidename{#1}}
+\newcommand{\setdesig}[1]{\def\designation{#1}}
+
+% document type (e.g., thesis)
+\newcommand{\setdoctype}[1]{\def\audoctype{#1}}
+% possible degree
+\newcommand{\bachelors}{\def\audegree{BACHELOR OF ENGINEERING}}
+\newcommand{\masters}{\def\audegree{MASTER OF ENGINEERING}}
+\newcommand{\doctors}{\def\audegree{DOCTOR OF PHILOSOPHY}}
+\newcommand*{\university}[1]{\def\univname{#1}}
+% defence date
+\newcommand{\setdefdate}[1]{\def\audefdate{#1}}
+% graduation date
+\newcommand{\setgraddate}[1]{\def\augraddate{#1}}
+% committe chair
+\newcommand{\setchair}[1]{\def\auchair{#1, Chair}}
+% committe co-chairs
+\newcommand{\setchairs}[2]{%
+\def\auchair{#1, Co-chair \\ #2, Co-chair}}
+% other members (separated by \\s)
+\newcommand{\setmembers}[1]{\def\aumembers{#1\par}}
+
+%%% typesets the TITLE page
+%\newcount \numauthors
+
+\newcommand{\thetitlepage}{%
+\clearpage
+\DoubleSpacing
+\thispagestyle{empty}
+\vspace*{-\toptafiddle}
+\begin{center}
+{\Large \bfseries \MakeUppercase \autitle \par}
+{\normalsize \itshape by \par}
+{\large 
+  \SingleSpacing
+  % 	\vspace{-2ex}
+  \ifnum \value{nauthors} = 1
+  \vspace{-2ex}
+  \MakeUppercase \authorone \ \regone\\
+  \fi
+
+  \ifnum \value{nauthors} = 2
+	\vspace{-2ex}
+  \begin{tabular}{ll}
+    \MakeUppercase \authorone & \regone\\
+    \MakeUppercase \authortwo & \regtwo\\
+  \end{tabular}
+  \fi
+
+  \ifnum \value{nauthors} = 3
+	\vspace{-2ex}
+  \begin{tabular}{ll}
+    \MakeUppercase \authorone & \regone\\
+    \MakeUppercase \authortwo & \regtwo\\
+    \MakeUppercase \authorthree & \regthree\\
+  \end{tabular}
+  \fi
+}
+
+\vfill
+\DoubleSpacing
+{\itshape A project report submitted to the} \par
+\textbf{FACULTY OF INFORMATION AND}  \par
+\textbf{COMMUNICATION ENGINEERING}  \par
+\bigskip
+{\itshape in partial fulfillment of the requirements for \par}
+{\itshape the award of the degree of \par}
+
+{\large \bfseries \audegree}\\
+{\itshape in}\\
+{\large \bfseries COMPUTER SCIENCE AND ENGINEERING \par} 
+
+\vfill
+\includegraphics[scale=0.6]{annauniv.png}\\
+{\bfseries DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING\\
+  ANNA UNIVERSITY, CHENNAI -- 25\\
+  \MakeUppercase\augraddate}
+\end{center}
+\enlargethispage{\bottafiddle}
+\clearpage}
+
+
+%%% put your biographical text in this environment
+%% \begin{biosketch} I’m a person who has accomplished .... \end{biosketch}
+\newenvironment{biosketch}{%
+\pretoctitle{BIOGRAPHICAL SKETCH}\thispagestyle{empty}\SingleSpacing}%
+{}
+
+\chapterstyle{au}
+\pagestyle{plain}
+\endinput
+\endaubecse	

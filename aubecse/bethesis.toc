@@ -1,0 +1,85 @@
+\contentsline {chapter}{ABSTRACT -- ENGLISH}{iii}
+\contentsline {chapter}{LIST OF FIGURES}{vii}
+\contentsline {chapter}{LIST OF TABLES}{viii}
+\contentsline {chapter}{\chapternumberline {1}INTRODUCTION}{1}
+\contentsline {section}{\numberline {1.1}PROBLEM DOMAIN}{1}
+\contentsline {section}{\numberline {1.2}PROBLEM STATEMENT}{2}
+\contentsline {section}{\numberline {1.3}SCOPE}{2}
+\contentsline {section}{\numberline {1.4}CONTRIBUTION}{3}
+\contentsline {section}{\numberline {1.5}OVERVIEW OF THE THESIS}{3}
+\contentsline {chapter}{\chapternumberline {2}RELATED WORK}{4}
+\contentsline {section}{\numberline {2.1}NAIVE BASED APPROACH}{4}
+\contentsline {section}{\numberline {2.2}K-NEAREST NEIGHBOURS}{5}
+\contentsline {section}{\numberline {2.3}ENSEMBLE FILTERING WITH ACTIVE LEARNING}{7}
+\contentsline {section}{\numberline {2.4}BOOSTING TREE APPROACH}{7}
+\contentsline {section}{\numberline {2.5}OBSERVATIONS FROM THE SURVEY}{8}
+\contentsline {chapter}{\chapternumberline {3}REQUIREMENTS ANALYSIS}{9}
+\contentsline {section}{\numberline {3.1}FUNCTIONAL REEQUIREMENTS}{9}
+\contentsline {section}{\numberline {3.2}NON-FUNCTIONAL REQUIREMENTS}{9}
+\contentsline {subsection}{\numberline {3.2.1}USER INTERFACE}{9}
+\contentsline {subsection}{\numberline {3.2.2}HARDWARE CONSTRAINTS}{9}
+\contentsline {subsection}{\numberline {3.2.3}SOFTWARE DEVELOPMENT}{10}
+\contentsline {subsubsection}{OPERATING SYSTEM}{10}
+\contentsline {subsubsection}{PROGRAMMING LANGUAGE}{10}
+\contentsline {subsubsection}{TOOLS}{10}
+\contentsline {subsection}{\numberline {3.2.4}PERFORMANCE}{10}
+\contentsline {section}{\numberline {3.3}CONSTRAINTS AND ASSUMPTIONS}{10}
+\contentsline {subsection}{\numberline {3.3.1}CONSTRAINTS}{10}
+\contentsline {subsection}{\numberline {3.3.2}ASSUMPTIONS}{11}
+\contentsline {section}{\numberline {3.4}SYSTEM MODEL}{11}
+\contentsline {subsection}{\numberline {3.4.1}USE CASE DIAGRAM}{11}
+\contentsline {subsection}{\numberline {3.4.2}SEQUENCE DIAGRAM}{11}
+\contentsline {chapter}{\chapternumberline {4}SYSTEM DESIGN}{13}
+\contentsline {section}{\numberline {4.1}SYSTEM DATA STRUCTURES}{13}
+\contentsline {subsection}{\numberline {4.1.1}TEXT ARRAY}{13}
+\contentsline {subsection}{\numberline {4.1.2}MODIFIED TEXT ARRAY}{13}
+\contentsline {subsection}{\numberline {4.1.3}TERM BY DOCUMENT MATRIX}{13}
+\contentsline {subsection}{\numberline {4.1.4}TRIPLET MATRIX <U,S,V>}{14}
+\contentsline {subsection}{\numberline {4.1.5}REDUCE TERM BY DOCUMENT MATRIX}{14}
+\contentsline {subsection}{\numberline {4.1.6}FEATURE SET}{14}
+\contentsline {subsection}{\numberline {4.1.7}TRAINING AND TESTING SET}{14}
+\contentsline {section}{\numberline {4.2}MODULE DESIGN}{15}
+\contentsline {subsection}{\numberline {4.2.1}TF*ID VECTORIZER TOOL}{15}
+\contentsline {subsubsection}{TEXT STEMMER}{15}
+\contentsline {subsubsection}{TOKENIZER}{15}
+\contentsline {subsection}{\numberline {4.2.2}SINGLE VALUE DECOMPOSITION}{16}
+\contentsline {subsection}{\numberline {4.2.3}TERM BY DOCUMENT MATRIX}{16}
+\contentsline {subsection}{\numberline {4.2.4}CREATE DATASET}{17}
+\contentsline {subsection}{\numberline {4.2.5}NEURAL NETWORK}{17}
+\contentsline {section}{\numberline {4.3}CLASS DIAGRAM}{17}
+\contentsline {section}{\numberline {4.4}COMPLEXITY ANALYSIS}{17}
+\contentsline {subsection}{\numberline {4.4.1}TIME COMPLEXITY}{17}
+\contentsline {subsection}{\numberline {4.4.2}COMPLEXITY OF THE PROJECT}{17}
+\contentsline {chapter}{\chapternumberline {5}SYSTEM DEVELOPMENT}{19}
+\contentsline {section}{\numberline {5.1}SYSTEM PROTOTYPES}{19}
+\contentsline {subsection}{\numberline {5.1.1}SEMANTIC FEATURE SPACE}{19}
+\contentsline {subsubsection}{TF*IDF-VECTORIZER}{19}
+\contentsline {subsubsection}{VALUE DECOMPOSITION}{20}
+\contentsline {subsection}{\numberline {5.1.2}Corpus Based Thesaurus Approach}{20}
+\contentsline {subsection}{\numberline {5.1.3}NEURAL NETWORK DESIGN}{20}
+\contentsline {subsection}{\numberline {5.1.4}SYSTEM DEPLOYMENT}{21}
+\contentsline {chapter}{\chapternumberline {6}RESULTS AND DISCUSSION}{22}
+\contentsline {section}{\numberline {6.1}DATASET FOR TESTING}{22}
+\contentsline {section}{\numberline {6.2}OUTPUT OBTAINED IN VARIOUS STAGES}{22}
+\contentsline {subsection}{\numberline {6.2.1}INPUT}{22}
+\contentsline {subsection}{\numberline {6.2.2}TOKENIZING AND STOP WORD REMOVAL}{22}
+\contentsline {subsection}{\numberline {6.2.3}TF-IDF VECTORIZATION}{22}
+\contentsline {subsection}{\numberline {6.2.4}SINGULAR VALUE DECOMPOSITION}{23}
+\contentsline {section}{\numberline {6.3}SAMPLE SCREENSHOTS DURING TESTING}{23}
+\contentsline {section}{\numberline {6.4}PERFORMANCE EVALUATION}{25}
+\contentsline {subsection}{\numberline {6.4.1}PRECISION}{25}
+\contentsline {subsubsection}{DESCRIPTION}{25}
+\contentsline {subsubsection}{ALGORITHM}{26}
+\contentsline {subsection}{\numberline {6.4.2}RECALL}{26}
+\contentsline {subsubsection}{DESCRIPTION}{26}
+\contentsline {subsubsection}{ALGORITHM}{27}
+\contentsline {subsection}{\numberline {6.4.3}F-MEASURE}{27}
+\contentsline {subsubsection}{DESCRIPTION}{27}
+\contentsline {subsubsection}{ALGORITHM}{27}
+\contentsline {subsection}{\numberline {6.4.4}ACCURACY}{28}
+\contentsline {section}{\numberline {6.5}SCORES OBTAINED AND DISCUSSION}{28}
+\contentsline {section}{\numberline {6.6}DOMAIN WISE ANALYSIS}{28}
+\contentsline {chapter}{\chapternumberline {7}CONCLUSIONS}{30}
+\contentsline {section}{\numberline {7.1}SUMMARY}{30}
+\contentsline {section}{\numberline {7.2}CRITICISMS}{30}
+\contentsline {section}{\numberline {7.3}FUTURE WORK}{31}

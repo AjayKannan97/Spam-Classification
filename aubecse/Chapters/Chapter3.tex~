@@ -1,0 +1,454 @@
+% Chapter 3
+
+\chapter{APPROACHES TO MIXTURE MODELLING} % All Chapter Headings in ALL CAPS
+\label{Chapter3}
+
+Consider the problem of identifying identical groups in a dataset $\{\textbf{x}_1,\textbf{x}_2, ... , \textbf{x}_n\}$.
+One needs to partition this dataset into a K clusters. Ideally, a cluster is a group of vectors whose inter-vector distance is
+small compared with other vectors outside it. In the Gaussan case, it's a group of vectors whose distance with an
+imaginary prototypical mean vectors is minimum. A GMM is forumulated using a \emph{latent} variable which 
+denotes the class to which a datapoint belongs to. 
+A mixture of $K$ Gaussians can be written as
+\begin{equation*}
+p(x) = \sum_{k=1}^{K}\pi_k \mathcal{N}(x, \mu_k,\Sigma_k)
+\end{equation*}
+where $\pi_k$ is the mixture weights. Introducing a K-dimensional binary random variable $\textbf z$ having a 1-of-K, whose marginal distribution is
+\begin{align*}
+p(z_k = 1) &= \pi_k \\
+and & \\
+0 \leq \pi &\leq 1 \\
+\sum_i \pi_i &= 1 \\
+\end{align*}
+
+The probability of any datapoint can be defined in terms of the laws of probability as
+
+\begin{equation*}
+p(\textbf x) = \sum_{\textbf z} p(\textbf z)p(\textbf x | \textbf z ) = \sum_{k=1}^K \pi_k\mathcal{N}(\textbf x |{\mu}_k, {\Sigma}_k)
+\end{equation*}
+
+The responsibility of each latent variable is also defined, which plays a significant role in the subsequent algorithms.
+
+\begin{equation*}
+\gamma(z_{nk}) = \frac{\pi_k\mathcal{N}(x_n|\mu_k,\Sigma_k)}{\sum_{j=1}^{K}\pi_j\mathcal{N}(x_n|\mu_j,\Sigma_j)}
+\end{equation*}
+
+
+
+\section{Expectation Maximization}
+Derivation of the EM can be done by writing down the maximum likelihood of the 
+$\log p(X|\pi,\mu,\Sigma)$ Deriving with respect to $\mu_k$,
+\begin{equation*}
+-\sum_{n=1}^{N}\frac{\pi_k\mathcal{N}(x_n|\mu_k,\Sigma_k)}{\sum_{j=1}^{K}\pi_j\mathcal{N}(x_n|\mu_j,\Sigma_j)}\Sigma_k(x_n - \mu_k) = 0
+\end{equation*}
+With some basic mathematical manipulation, (multiplying $\Sigma ^{-1}$ on either side),
+\begin{equation*}
+\mu_k = \frac{1}{N_k}\sum_{n=1}^{N}\gamma(z_{nk})\textbf x _n
+\end{equation*}
+Setting the derivative with respect to $\Sigma_k$ to zero
+\begin{equation*}
+\Sigma_k = \frac{1}{N_k}\sum_{n=1}^{N}\gamma(z_{nk})(x_n - \mu_k)(x_n - \mu_k)^T
+\end{equation*}
+With further mathematical manipulation (using Lagrange's multpliers - which we don't concern ourselves with)
+\begin{equation*}
+\pi_k = \frac{N_k}{N}
+\end{equation*}
+
+\IncMargin{1em}
+\begin{algorithm}[htb]
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\Input{The dataset as X, threshold $\Delta$}
+\Output{Maximize likelihood functions w.r.t $\mu_k, \Sigma_k$ and $\pi_k$}
+\BlankLine
+\emph{Using K-means initialize the means $\mu_k$, covariances $\Sigma_k$ and mixing coefficients $\pi_k$. Calculate initial log likelihood.};
+\BlankLine
+\While{$\delta \geq \Delta$}{
+\emph{Evaluate the responsibilities using current parameters}\;
+\begin{equation*}
+\gamma(z_{nk}) = \sum_{n=1}^{N}\frac{\pi_k\mathcal{N}(x_n|\mu_k,\Sigma_k)}{\sum_{j=1}^{K}\pi_j\mathcal{N}(x_n|\mu_j,\Sigma_j)}
+\end{equation*}
+\BlankLine
+\emph{Evaluate the parameters using current responsbilities}\;
+\begin{align*}
+\mu_k^{new} &= \frac{1}{N_k}\sum_{n=1}^N \gamma(z_{nk})x_n \\ \\
+\Sigma_k^{new} &= \frac{1}{N_k}\sum_{n=1}^{N}\gamma(z_{nk})(x_n - \mu_k)(x_n - \mu_k)^T \\ \\
+\pi_k^{new} &= \frac{N_k}{N} \\
+\end{align*}
+\emph{Evaluate the log likelihood and $\delta$}\;
+\begin{align*}
+\log p(\textbf{X} | \mu, \Sigma, \pi) &= \sum_{n=1}^{N}\log\{\sum_{k=1}^{K}\pi_k\mathcal{N}(\textbf{x}|\mu_k, \Sigma_k)\} \\
+\delta &= likelihood_{previous} - likelihood_{current}
+\end{align*}
+}
+\caption{Expectation Maximization for GMM}\label{EM}
+\end{algorithm}
+\DecMargin{1em}
+
+\IncMargin{1em}
+\begin{algorithm}[htb]
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\Input{The dataset as X, threshold $\Delta$}
+\Output{Maximize likelihood functions w.r.t $\mu_k, \Sigma_k$ and $\pi_k$}
+\BlankLine
+\emph{Using K-means initialize the means $\mu_k$, covariances $\Sigma_k$ and mixing coefficients $\pi_k$. Calculate initial log likelihood.};
+\BlankLine
+\While{$\delta \geq \Delta$}{
+\emph{Evaluate the responsibilities using current parameters}\;
+\begin{equation*}
+\log z = \psi(\gamma) - \psi(\sum_k{\gamma}) + E_Q[\log P(X_i|z_i = k)
+\end{equation*}
+\BlankLine
+\emph{Evaluate the parameters using current responsbilities}\;
+\begin{align*}
+a &= 1 + \frac{1}{2}\sum_i{z_{i,k}} \\
+B &= 1 + \frac{1}{2}\sum_i{z_{i,k}({(X_{i,d} - \mu_{i,d})}^2 + 1}) \\
+\mu &= \sum_i{\frac{z_{i,k} B_k X}{a_k}} * {(1 + \sum_i{\frac{z_{i,k} B_k}{a_k}})}^{-1} \\
+\Lambda &= \frac{a}{B} \\
+\gamma &= \alpha + \sum_i(\gamma_i)
+\end{align*}
+\emph{Evaluate the log likelihood and $\delta$}\;
+\begin{align*}
+\log p(\textbf{X} | \mu, \Sigma, \pi) &= \sum_{n=1}^{N}\log\{\sum_{k=1}^{K}\pi_k\mathcal{N}(\textbf{x}|\mu_k, \Sigma_k)\} \\
+\delta &= likelihood_{previous} - likelihood_{current}
+\end{align*}
+}
+\caption{Varitional Inference for GMM}\label{VI}
+\end{algorithm}
+\DecMargin{1em}
+
+\IncMargin{1em}
+\begin{algorithm}[htb]
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\Input{The dataset as X, threshold $\Delta$}
+\Output{Maximize likelihood functions w.r.t $\mu_k, \Sigma_k$ and $\pi_k$}
+\BlankLine
+\emph{Using K-means initialize the means $\mu_k$, covariances $\Sigma_k$ and mixing coefficients $\pi_k$. Calculate initial log likelihood.};
+\BlankLine
+\While{$\delta \geq \Delta$}{
+\emph{Evaluate the responsibilities using current parameters}\;
+\begin{equation*}
+\log z_i = \psi(\gamma_1) - \psi(\gamma_1 + \gamma_2)  + E_Q[\log P(X_i|z_i = k) + \sum_{j<k}{\psi(\gamma_2) - \psi(\gamma_1 + \gamma_2)}
+\end{equation*}
+\BlankLine
+\emph{Evaluate the parameters using current responsbilities}\;
+\begin{align*}
+a &= 1 + \frac{1}{2}\sum_i{z_{i,k}} \\
+B &= 1 + \frac{1}{2}\sum_i{z_{i,k}({(X_{i,d} - \mu_{i,d})}^2 + 1}) \\
+\mu &= \sum_i{\frac{z_{i,k} B_k X}{a_k}} * {(1 + \sum_i{\frac{z_{i,k} B_k}{a_k}})}^{-1} \\
+\Lambda &= \frac{a}{B} \\
+\gamma_1 &= 1 + \sum_i(z_i) \\
+\gamma_2 &= \alpha + \sum_i{\sum_{j<k}{z_i}} \\
+\end{align*}
+\emph{Evaluate the log likelihood and $\delta$}\;
+\begin{align*}
+\log p(\textbf{X} | \mu, \Sigma, \pi) &= \sum_{n=1}^{N}\log\{\sum_{k=1}^{K}\pi_k\mathcal{N}(\textbf{x}|\mu_k, \Sigma_k)\} \\
+\delta &= likelihood_{previous} - likelihood_{current}
+\end{align*}
+}
+\caption{Dirichlet Process for GMM}\label{DP}
+\end{algorithm}
+\DecMargin{1em}
+
+
+\IncMargin{1em}
+\begin{algorithm}[htb]
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\Input{The dataset as X, threshold $\Delta$}
+\Output{Maximize likelihood functions w.r.t $\mu_k, \Sigma_k$ and $\pi_k$}
+\BlankLine
+\emph{Initialize the parameters according to the following}\;
+\begin{align*}
+p(\mu_j| \lambda, r) &\sim \mathcal{N}(\lambda, r^{-1}) \\
+p(\lambda) &\sim \mathcal{N}(\mu_y, \sigma_y^{2}) \\
+p(r) &\sim \mathcal{G}(1, \sigma_y^{-2}) \\
+p(\sigma_j| \beta, w) &\sim \mathcal{G}(\beta, w^{-1}) \\
+p(\beta^{-1}) &\sim \mathcal{G}(1,1) \\
+p(w) &\sim \mathcal{G}(1,\sigma_y^{2}) \\
+p(\alpha) &\sim \mathcal{G}(1,1) \\
+p(\pi_1...\pi_k|\alpha) &\sim Dirichlet(\alpha/k,...,\alpha/k) \\
+\end{align*}
+\BlankLine
+\While{$iter \leq \Delta$}{
+\begin{enumerate}
+	\item Sample $\mu$
+		\begin{enumerate}
+		\item Sample $\lambda$	
+		\item Sample $r$	
+		\end{enumerate}
+	\item Sample $\sigma$
+		\begin{enumerate}
+		\item Sample $\beta$	
+		\item Sample $w$	
+		\end{enumerate}
+	\item Sample using slice sampling, $\alpha$ \& $\beta$
+	\item For existing classes, $p(c_i = j| c_{-i}, \alpha) = \frac{n_{-i,j}}{n - 1 + \alpha}$
+	\item For all other classes, $p(c_i = j| c_{-i}, \alpha) = \frac{\alpha}{n - 1 + \alpha}$
+	\end{enumerate}
+}
+\caption{Gibbs' Sampling for GMM}\label{GB}
+\end{algorithm}
+\DecMargin{1em}
+\section{Variational Inference}
+
+Kullback-Leibler Divergence 
+
+This is used to measure how similiar two distributions are. The KL divergence for variational inference is,
+
+\begin{equation*}
+KL(q||p) = E_q[ \log \frac{q(Z)}{p(Z|X)}]
+\end{equation*}
+
+\begin{itemize}
+\item if q and p are high, expectation is low, which implies KL is low
+\item if q is high and p low, expectation is high, which means q and p are dissimiliar
+\item if q is low, expectation tends to be low.
+\end{itemize}
+
+Because directly minimizing the value of KL is not possile one alternatively reduces the value of the evidence lower bound.
+
+\begin{align*}
+\log p(x) &= \log \int_z p(x,z) dz \\
+&= \log \int_z p(x,z) \frac{q(z)}{q(z)}dz \\
+&= \log(E_q[\frac{p(x,Z)}{q(z)}]) \\
+\text{By Jenson's  inequality,} & \\
+ & \geq E_q[\log p(x,Z)] - E_q[ \log q(Z)] \\
+\end{align*}
+
+The million dollar question is how exactly are ELBO and KL related.
+
+\begin{align*}
+KL(q(z)||p(z|x)) &= E_q[\frac{\log p(x|Z)}{\log q(z)}]) \\
+				 &= E_q[\log q(Z)] - E_q[\log p(x|Z)]  \\
+				 &= E_q[\log q(Z)] - E_q[\log p(x,Z)] + \log p(x) \\
+				 &= -(E_q[\log p(x,Z)] - E_q[\log q(Z)]) + \log p(x) \\
+				 &= -\mathcal{L}{q} + \log p(x) \\
+\end{align*}
+
+By maximizing the ELBO, we tent to minimize the KL.
+
+A major and the only assumption of variational inference is that distributions are
+factorizable. This helps convert an entirely probabilistic inference to an approximate one.
+By factorizable, we mean that,
+
+\begin{equation*}
+q(z_1,z_2,...,z_m) = \prod_{j=1}^{m}q(z_j)
+\end{equation*}
+\begin{itemize}
+\item The optimal solution for each independant factor is arrived at as\\ $\log q(z_j) = E_{i\neq j}[\log P(X,Z)] + const]$
+\item For example, consider a mixture model wth mixing coefficients $\pi$, means $\mu$ and precisions $\Lambda$. Then $p(X,Z,\pi,\mu,\Lambda)$ is approximated by,
+\item $q(Z,\pi,\mu,\Lambda) = q(Z)q(\pi, \mu, \Lambda)$ i.e $q$ is factorized into the latent variable and the parameters.
+\item Subsequent inference is done as follows
+\begin{itemize}
+\item $\log q(Z)  =  E_{\mu, \Lambda}[{\log p(X | Z,\mu,\Lambda)}] +  E_{\pi}[{\log p(Z|\pi)}] + const$
+\item $\log q(\pi)  =  E_{Z}[{\log p(Z|\pi)}] + E[{\log p(\pi)}] + const$
+\item $\log q(\mu)  =  E_{Z, \Lambda}[{\log p(X | Z,\mu,\Lambda)}] + E_{\Lambda}[{\log p(\mu | \Lambda)}] + const$
+\item $\log q(\Lambda)  =  E_{Z, \mu}[{\log p(X | Z,\mu,\Lambda)}] + E[{\log p(\Lambda)}] + const$
+\end{itemize}
+\end{itemize}
+
+\begin{equation*}
+\end{equation*}
+
+\subsection{Fitting a Gaussian - a basic example}
+To find the parameters of a normal distribution $\mathcal{N}(\mu, \tau)$ using variational bayes we set conjugate priors on
+\begin{align*}
+\mu & \sim \mathcal{N}(\mu_0, (\lambda_0 \tau)^{-1}) \\
+\tau & \sim \operatorname{Gamma}(a_0, b_0) \\
+\{x_1, \dots, x_N\} & \sim \mathcal{N}(\mu, \tau^{-1}) \\
+N &= \text{number of data points}
+\end{align*}
+We will just look at parts of the proof as the derivation tends to be very tedious. 
+\begin{align*}
+\ln q_\mu^*(\mu) &= \operatorname{E}_{\tau}[\ln p(\mathbf{X}\mid \mu,\tau) + \ln p(\mu\mid \tau) + \ln p(\tau)] + C \\
+ &= \operatorname{E}_{\tau}[\ln p(\mathbf{X}\mid \mu,\tau)] + \operatorname{E}_{\tau}[\ln p(\mu\mid \tau)] + \operatorname{E}_{\tau}[\ln p(\tau)] + C \\
+ &= \operatorname{E}_{\tau}[\ln \prod_{n=1}^N \mathcal{N}(x_n\mid \mu,\tau^{-1})] + \operatorname{E}_{\tau}[\ln \mathcal{N}(\mu\mid \mu_0, (\lambda_0 \tau)^{-1})] + C_2 \\
+&= - \frac{\operatorname{E}_{\tau}[\tau]}{2} \{ \sum_{n=1}^N (x_n-\mu)^2 + \lambda_0(\mu-\mu_0)^2 \} + C_3 \\
+&= - \frac{1}{2} \left\{ (\lambda_0+N)\operatorname{E}_{\tau}[\tau] \left(\mu-\frac{\lambda_0\mu_0 + \textstyle\sum_{n=1}^N x_n}{\lambda_0+N}\right)^2 \right\} + C_5 \\
+\text{In other words,} & \text{using sum of two quadratics and taking exponential on either side,} \\
+q_\mu^*(\mu) &\sim \mathcal{N}(\mu\mid \mu_N,\lambda_N^{-1}) \\
+\mu_N &= \frac{\lambda_0 \mu_0 + N \bar{x}}{\lambda_0 + N} \\
+\lambda_N &= (\lambda_0 + N) \operatorname{E}[\tau] \\
+\bar{x} &= \frac{1}{N}\sum_{n=1}^N x_n
+\end{align*}
+
+Similiarly, 
+\begin{align*}
+\ln q_\tau^*(\tau) &= \operatorname{E}_{\mu}[\ln p(\mathbf{X}\mid \mu,\tau) + \ln p(\mu\mid \tau)] + \ln p(\tau) + \text{constant} \\
+ &= (a_0 - 1) \ln \tau - b_0 \tau + \frac{1}{2} \ln \tau + \frac{N}{2} \ln \tau  \\
+ &\quad- \frac{\tau}{2} \operatorname{E}_\mu [\sum_{n=1}^N (x_n-\mu)^2 + \lambda_0(\mu - \mu_0)^2] + \text{constant} \\ 
+\text{Taking exponentiation} \\
+q_\tau^*(\tau) &\sim \operatorname{Gamma}(\tau\mid a_N, b_N) \\
+a_N &= a_0 + \frac{N+1}{2} \\
+b_N &= b_0 + \frac{1}{2} \operatorname{E}_\mu \left[\sum_{n=1}^N (x_n-\mu)^2 + \lambda_0(\mu - \mu_0)^2\right]
+\end{align*}
+
+\section{Dirichlet Process}
+The Dirichlet Process is a distribution over distributions.  It centred on a base distribution $G_0$ and a scaling parameter $\alpha$ which acts as a sort of variance. Suppose we draw from $G_0$ a distribution $G$ from which in turn we draw N random variables $\eta_n$, then
+\begin{align*}
+G | G_0, \alpha &\sim DP(\alpha, G_0) \\
+\eta_n &\sim G, \quad n \{1...N\} 
+\end{align*}
+Now assume that $\eta_n$ is treated as the parameter of the $n^{th}$ observation. For identical values of $\eta_n$ one assigns positive probability measures. 
+The stick-breaking representation confirms that G is a discrete distribution. This technically allows for an infinite number of classes	for the mixture models.
+Given a sample of data $\{x_1, x_2, ... , x_n\}$ our goal is to maximize the probability mixture,
+\begin{equation*}
+p(x | x_1, ..., x_n, \alpha, G_0) = p(x | \eta )p( \eta| x_1,..., x_n, \alpha, G_0)d\eta
+\end{equation*}
+This leads to the forumulation of the Dirichlet Process Mixture Model.
+\begin{align*}
+G | G_0, \alpha &\sim DP(\alpha, G_0) \\
+\eta_n | G &\sim G, \quad n \{1...N\} \\
+X_n | \eta_n &\sim p(x_n,\eta_n)\\
+\end{align*}
+The stick-breaking representation is as follows,
+\begin{equation*}
+\phi_k = v_i\prod_{j=1}^{i-1}(1-v_j)
+\end{equation*}
+i.e the mixing proportions are given by successively breaking a stick into an infinite number of pieces. This is equivalent to drawing from a $Beta(1,\alpha)$ distribution.
+\begin{itemize}
+\item Draw $\phi_k = Beta(1, \alpha) \quad i = \{1,2,...\}$
+\item Draw $\eta_i^* | G_0 \sim G_0 \quad i = \{1,2,...\}$
+\item For each data point
+\begin{itemize}
+\item Draw $Z_n | {\phi_1, \phi_2...} \sim Mult(\Phi)$
+\item Draw $X_n | \eta_n \sim p(x_n,\eta_n)$
+\end{itemize}
+\end{itemize}
+\subsection{Variational Inference for Dirichlet Process}
+\begin{itemize}
+\item Described by the stick breaking process. Generate mixing proportions according to $\phi_k = Beta(1,\alpha) $; then $z = SBP(\phi)$  
+\item As is usual in all Bayesian analysis, the distributions for $\mu$ = $Normal(\mu^,, I)$,\\ $\Lambda = NormalWishart(a, B)$,  $\phi = Beta(\gamma_1, \gamma_2)$ and $Z$ is $Discrete$.
+\item For inference, one ought to find the parameters of all the above distributions. 
+\end{itemize}
+
+\section{Gibbs' Sampling}
+The IGMM \cite{Rasmussen1999} is an elegant example of the Bayesian
+methodology.  Consider a heirarchical mixture model with $k$ finite
+classes. Then the probability of the dataset $Y$ is given as
+\begin{equation*}
+  p(y|\mu_1,\dots,\mu_k,\sigma_1,\dots,\sigma_k,\pi_1, \dots,\pi_k) = \sum_{j=1}^{k}\pi_j\mathcal{N}(\mu_j,\sigma_j^{-1})
+\end{equation*}
+\subsection{Initialization}
+The means of each component are given Gaussian priors
+\begin{equation*}
+  p(\mu_j| \lambda, r) \sim \mathcal{N}(\lambda, r^{-1})
+\end{equation*}
+where $\lambda$ and $r$ are given vague normal and gamma priors.  
+\begin{align*}
+p(\lambda) &\sim \mathcal{N}(\mu_y,\Sigma_y) \\
+p(r) &\sim \mathcal{W}(\phi, \Sigma_y)
+\end{align*}
+The precisions of each component, i.e., the inverse of the variance are
+given Gamma priors
+\begin{equation*}
+  p(\sigma_j| \beta, w) \sim \mathcal{G}(\beta, w^{-1})
+\end{equation*}
+where $\beta$ and $w$ are given Gamma priors. 
+\begin{align*}
+p(\beta^{-1}) &\sim \mathcal{G}(1,1) \\
+p(w) &\sim \mathcal{G}(\phi, \Sigma)
+\end{align*}
+Finally the classes depend directly on the concentration parameter $\alpha$.
+\begin{align*}
+  p(c_i = j| c_{-i}, \alpha) &\sim \frac{n_{-i,j} + {\alpha}/{K}}{n - 1 + \alpha} \\
+  p(\alpha) &\sim \mathcal{G}(1,1)	
+\end{align*}
+
+\subsection{Posterior Updates}
+The conditional posterior distribution for means is obtained by multiplying the likelihood with 
+the prior of $\mu_j$.
+\begin{equation*}
+p(\mu_j | \textbf c, \textbf y, s_j, \lambda, r) \sim \mathcal{N}(\frac{\overline y_j n_j s_j + \lambda r}{n_j s_j + r},\frac{1}{n_j s_j + r})
+\end{equation*}
+
+The posterior update for the mean parameters are given by multiplying the means with the priors for $\lambda$ and $r$ respectively.
+\begin{align*}
+p(\lambda| \mu_1,...\mu_k,r) &\sim \mathcal{N}({\frac{\mu_y,\sigma_y^{-2} + r\sum_{j=1}^{k}{\mu_j}}{\sigma_y^{-2} + kr},\frac{1}{\sigma_y^{-2} + kr}}) \\
+p(r|\mu_1,...\mu_k,\lambda) &\sim \mathcal{G}(k+1,[\frac{1}{k+1}(\sigma_y^{-2} + \sum_{j=1}^{k}{(y_i - \mu_j)^2})]^{-1})
+\end{align*}
+
+The conditional posterior distribution for covariance/precision is obtained by multiplying the likelihood with 
+the prior of $s_j$.
+\begin{equation*}
+p(s_j | \bold{c,y},s_j,\beta, w) &= \mathcal{G}(\beta + n_j,[\frac{1/}{\beta + n_j}(w\beta + \sum_{i}^{k}{(y_i - \mu_j)^2})]^{-1})
+\end{equation*}
+
+Again, the posterior updates for the covariance parameters are obtained as a product of the covariance with the priors of $\beta$ and $w$.
+\begin{align*}
+p(w|s_1,...s_k,\beta) &\sim \mathcal{G}(k\beta+1,[\frac{1}{k\beta+1}(\sigma_y^{-2} + \beta \sum_{j=1}^{k}{s_j})]^{-1})\\
+p(\beta|s_1,...s_k,w) &\sim \Gamma(\frac{\beta}{2})^{-k}exp(\frac{-1}{2\beta})\frac{\beta}{2}^{\frac{k\beta - 3}{2}}\prod_{j=1}^{k}{s_jw}^{\beta/2}\exp(-\frac{\beta s_jw}{2})
+\end{align*}
+
+The update for alpha conditioned on the number of datapoints and clusters is, 
+\begin{equation*}
+p(\alpha|k,n) \sim \frac{\alpha^{k - 3/2}exp({-1/(2\alpha)})\Gamma(\alpha)}{\Gamma(n+\alpha)}
+\end{equation*}
+
+The latent variable z for each datapoint is repeatedly sampled for each update, 
+\begin{align*}
+&if(n_{-i,j}>0) \\
+&p(c_j = k | c_{-i},\mu_j,s_j,\alpha) \sim \frac{n_{-i,j}}{n - 1 + \alpha}s_j^{-0.5}exp(-s_j(y_i - \mu_j)^2/2) \\
+&else\\
+&p(c_j = k | c_{-i},\mu_j,s_j,\alpha) \sim \frac{\alpha}{n - 1 + \alpha}s_j^{-0.5}exp(-s_j(y_i - \mu_j)^2/2)
+\end{align*}
+
+Because the in most cases the conjugate priors fall in place, sampling becomes easy as standard distributions are transferred to
+the posterior. However, in the case of $\alpha$ and $\beta$ the case becomes a little bit trickier, as the posteriors are 
+non-standard. Hence we resort to slice sampling. 
+
+\IncMargin{1em}
+\begin{algorithm}[H]
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\Input{Non-standard distribution to sample from $P^*(x)$}
+\Output{A sample}
+\BlankLine
+\emph{Evaluate $P^*(x)$}\;
+\emph{Draw a vertical coordinate $u' \sim Uniform(0, P^*(x)$}\;
+\emph{Create a horizontal interval}\;
+\emph{draw $r \sim Uniform(0,1)$}\;
+\emph{$x_l = x - rw$}\;
+\emph{$x_r = x + (1-r)w$}\;
+\While{$(P^*(x_l) > u')$}{
+$x_l \leftarrow x_l - w$
+}
+\While{$(P^*(x_r) > u')$}{
+$x_l \leftarrow x_r + w$
+}
+\emph{draw $x' \sim Uniform(x_l,x_r)$}\;
+\emph{evaluate $P^*(x')$}\;
+\While{$P^*(x') > u' $ }{
+\emph{modify $(x_l,x_r)$}\;
+\If{$x' > x$} {
+$x_r \leftarrow x'$
+}
+\Else{
+$x_l \leftarrow x'$
+}
+}		
+\caption{Slice Sampling}\label{slice}
+\end{algorithm}\DecMargin{1em}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics{plate.pdf}
+  \caption{Hierarchichal Bayesian Model for IGMM}
+\end{figure}
+
+Generalizing to multivariate distribution is trivial.  The prior of
+the precision becomes Wishart and the variance, covariance.  It can be seen that the model is fully
+automatic. Because of the conjugate priors introduced by the
+appropriate distributions, the sampling procedure becomes
+trivial. However, sampling $\alpha$ and $\beta$ is problematic as
+these are essentially non-standard distributions. Thus sampling is
+done through either slice sampling or through adaptive rejection
+sampling (for log-concave distributions).  A plate diagram helps
+visualise the hierarchichal structure of the Bayesian model.

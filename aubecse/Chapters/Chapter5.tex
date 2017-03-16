@@ -1,0 +1,35 @@
+% Chapter 5
+
+\chapter{SYSTEM DEVELOPMENT} % Write in your own chapter title
+
+
+The system described consists of various packages like NLTK,SnowBall Stemmer,and neural network.The overall code overview showing the 
+organisation of these various packages of the spam classification system can be seen in the figure below.
+
+
+\section{SYSTEM PROTOTYPES}
+
+The input and output to each module of the system is described in
+this section.
+
+\subsection{SEMANTIC FEATURE SPACE}
+This module takes as input,the spam and ham email bodies.It tokenizes the contents of spam and ham arrays,converts them to lowercase and generates corresponding output arrays as simplified email corpus. The snowball stemmer takes the simplified email corpus as input and removes the suffix of different occurrences of the verb and produces a primitive email corpus as the output.
+
+
+\subsubsection{TF*IDF-VECTORIZER}  
+The TF*IDF Vectoriser takes the primitive email corpus as input and assigns weights to each word by computing Term frequency matrix and the inverse document frequency matirx.The output is a TF*IDF matrix.
+\subsubsection{VALUE DECOMPOSITION}
+The SVD takes as input,the TF*IDF matrix and splits it into a triplet matrices <U,S,V>, which is then passed through the reduction algorithm. The resultant matrix is kept as the template matrix. 
+
+\subsection{Corpus Based Thesaurus Approach}
+The basic idea of corpus based thesaurus is to calculate the similarities between two terms on the basis of their co-occurrence in a document corpus. This approach is based on the association hypothesis that related terms tend to co-occur in documents in the corpus. As a result, this type of automatic thesaurus consists of a set of weighted term associations. 
+
+
+Algorithmically, the only difference between the LSFS approach and the corpus based thesaurus approach is that the Term by document matrix before passing through the SVD is passed through a cosine similarity algorithm to find the co-occurrence between any two given words in the corpus. The resultant is then further reduced through decomposition.    
+
+\subsection{NEURAL NETWORK DESIGN}
+In order to improve the back propagation algorithm in terms of its rate of convergence and global search capability, we consider the adjustment of the learning rate, since the learning behavior of the back propagation depends very much on the choice of learning rate. The adaptive back propagation algorithm uses statistical technique to evaluate each learning phase. The learning effects indicate the direction of the network globally and get rid of the blindness of mechanical and repeated single learning. The next learning phase adjusts the learning model based on the evaluation effects in the previous learning phase. During the learning phase, the system records: the Minimum Error in the Current learning phase (CME), the Minimum Error in the Previous learning phase (PME), and the Minimum Error that we get so far from the beginning of the training process, which we called Global Minimum Error (GME). Then, we calculate the learning effects of the networks: the global effect, relative effect and synthesis effect. The Global Effect (GEffect) is used to evaluate the effect of the optimum value between the current learning phase and global learning phase; the Relative Effect (REffect) is used to evaluate the effect between the current learning phase and previous learning phase; the Synthesis Effect (SEffect) is used to evaluate the effect in the whole learning process. 
+
+\subsection{SYSTEM DEPLOYMENT}
+
+Once, the system is trained, any given email can be taken and transformed using the Tfidf vectorizer. The transformed vector is multiplied with the template reduced term by document matrix to create the feature set. When the feature set is passed through the neural net, the network’s prediction is the classification. 

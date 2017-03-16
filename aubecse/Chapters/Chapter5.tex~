@@ -1,0 +1,182 @@
+% Chapter 5
+
+\chapter{Testing} % Write in your own chapter title
+\label{Chapter5}
+\lhead{Chapter 5. \emph{Testing}} % Write in your own chapter title to set the page header
+
+This chapter details on various testing procedures done over the completed modules in order to ensure the correctness of the implementation of the two modules, Reconfigurability in Interconnection Network and File Access Accelerator.
+
+\section{Unit Testing (Reconfigurability in Interconnection Network)}
+
+  \subsection{Omega ICN Module}
+ Each of the Modules are tested with different values of nodes ranging from 64 to 512 and with following traffic patterns and their average latencies and hopcounts are measured.
+   \begin{itemize}
+        \item Uniform
+        \item Bitreversal
+        \item Bitcomplement
+        \item RandomPermutation
+   \end{itemize}
+
+Figure %\ref{fig:omega_table}
+ gives the output obtained by running these patterns on Omega ICN Module.
+
+%%%%%%%%%%%%%%% TABLE FROM ARUN  ALSO HAVE TO CHANGE THE FIG REFERENCE%%%%%%%%%%%%%%%
+
+  \subsection{Reconfigurable ICN Module}
+     \begin{itemize}
+        \item The algorithm is tested with a random graph and the correct topology of interconnection networks are obtained.
+       \item Random graph of 25 nodes is used to test the connected components algorithm and found to produce the correct number of components.
+     \end{itemize}
+
+\section{Unit Testing (Filesystem Access Accelerator)}
+
+\subsection{Memory Access Module}
+A testbench is used to simulate each module separately (\textbf{Unit Testing}). The whole Memory Access Module is then tested after the structural integration of the sub-modules.
+
+Each module is tested with a testbench. The test cases typically are of alternating 1s and 0s in binary. That is, $A5A5$, $5A5A$, $55AA$ and $AA55$. These test cases are used in order to find whether any nearby signal lines (in bus) are short-circuited. This is imperative while configuring FPGAs and designing ASICs. The timing diagram for BRAM, BRAM Controller and IBR unit is shown in the Figure% \ref{fig:time_BRAM},\ref{fig:time_BRAM_C},and \ref{fig:time_IBR}
+ 7, 8,and 9, respectively.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.5]{time_BRAM.png}
+		\caption{ Timing Diagram -- BRAM Module}
+		\label{fig:time_BRAM}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.5]{time_BRAM_C.png}
+		\caption{ Timing Diagram -- BRAM Controller Module}
+		\label{fig:time_BRAM_C}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.5]{time_IBR.png}
+		\caption{ Timing Diagram -- Internal Register Buffer Module}
+		\label{fig:time_IBR}
+\end{figure}
+
+
+\subsubsection{Exceptional Testing Cases}
+
+Following is the list of exceptional cases in MAM for which the system is designed to deterministically handle those inputs. They are:
+\begin{enumerate}
+ \item $Reg\_read$ and $load\_reg$ at the same clock cycle. This situation results in no change in the output of the IBR (handled by the $xor$ gate).
+ \item $we$ , Write Enable signal is high and $en$, Enable signal is low. This situation results in unsuccessful read or write.
+\end{enumerate}
+
+
+\subsection{File/Directory Search Module}
+    Separate units of this module are tested individually and later tested with all the units integrated.
+
+\subsubsection{16x1 Multiplexer}
+    The 16x1 mux selects one of the 16 words from the IBR using the 4bit select signal. Figure \ref{fig:wave_mux} gives the output of the mux with the select signal equal to "1111".
+
+\begin{figure}[!ht]
+	\centering	\includegraphics[scale=0.5]{wave_mux.png}
+		\caption{ Timing Diagram -- 16x1 Multiplexer}
+	\label{fig:wave_mux}
+\end{figure}
+
+
+\subsubsection{Header Extraction}
+    Header must be extracted from each record to proceed with comparison. Three major important fields are extracted from the header -
+    \begin{enumerate}
+        \item \textbf{Inode Number} - This gives the inode number of the file in the hard disk. This is output to the CPU once comparison succeeds. Figure \ref{fig:wave_inode} gives the inode number extracted from the header.
+
+    \begin{figure}[!ht]
+
+	    
+	    \centering
+	    \includegraphics[scale=0.5]{wave_inode_bus.png}
+	    \caption{ Timing Diagram -- Inode Number Extraction}
+         \label{fig:wave_inode}	
+    \end{figure}
+
+        \item \textbf{Record Length} - This gives the length of the record. This is used to find the end of the record. Figure \ref{fig:wave_reclen} gives the record length extracted from the header.
+
+    \begin{figure}[!ht]
+
+	    
+	    \centering
+	    \includegraphics[scale=0.6]{wave_reclen_bus.png}
+	    \caption{ Timing Diagram -- Record Length Extraction}
+	    \label{fig:wave_reclen}
+    \end{figure}
+
+        \item \textbf{Name Length} - This gives the length of the file name available in the record. Figure \ref{fig:wave_namelen} gives the name length extracted from the header.
+
+    \begin{figure}[!ht]
+	    \centering
+	    \includegraphics[scale=0.6]{wave_namelen.png}
+	    \caption{ Timing Diagram -- Name Length Extraction}
+	    \label{fig:wave_namelen}
+    \end{figure}
+
+
+    \end{enumerate}
+
+\subsubsection{Mask String Generation}
+    Since the file name can be anywhere within the IBR, a mask string is generated that instructs the comparator to compare only regions with mask bit equal to one. Figure \ref{fig:wave_mask} gives the mask string generated.
+
+    \begin{figure}[!ht]
+
+	    
+	    \centering
+	    \includegraphics[scale=0.5]{wave_mask_bus.png}
+	    \caption{ Timing Diagram -- Mask String Generation}
+	    \label{fig:wave_mask}
+    \end{figure}
+
+\subsubsection{Comparator}
+    The 128 bit comparator is composed of eight 8-bit comparators. Given the two 128 bit inputs and the mask string, the comparator gives output in the next clock cycle. Figure \ref{fig:wave_comp} gives the output of the comparator along with the wave forms of the eight 8-bit comparators.
+
+    \begin{figure}[!ht]
+
+	    
+	    \centering
+	    \includegraphics[scale=0.5]{wave_comp.png}
+	    \caption{ Timing Diagram -- Comparator}
+	    \label{fig:wave_comp}
+    \end{figure}
+
+\ \\ \\
+\section{Integration Testing (Reconfigurability in Interconnection Network)}
+
+\subsection{Reconfigurable ICN }
+\begin{itemize}
+  \item The configuration file for Booksim is generated by the algorithm and it is tested for connectedness of the topology and presence of duplicate edges in the configuration file.
+
+\item The connectedness is tested by verifying the existence of path between all pairs of nodes.
+
+\item Optimized Laplace Solver on a 2D Grid \cite{laplace} is used as the MPI application to generate the communication pattern, which is used both for Synthesis of Reconfigurable ICN topology and generation of Real Traffic for simulation.
+
+\end{itemize}
+
+\section{Integration Testing (Filesystem Access Accelerator)}
+
+\subsection{Memory Access Module - Submodule Integration}
+
+Figure \ref{fig:time_MemMod} is the timing diagram output after the integration the Memory Access Modules
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.5]{time_MemMod2.png}
+	\caption{ Timing Diagram -- Memory Access Module}
+	\label{fig:time_MemMod}
+\end{figure}
+
+\subsection{ System Integration }
+    Figure \ref{fig:wave_full} gives the timing diagram of the complete system after integration. At the position of the yellow cursor, the comparator's output signal becomes high, signifying that the comparison has succeeded.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.5]{wave_full.png}
+	\caption{ Timing Diagram -- Full System}
+	\label{fig:wave_full}
+\end{figure}
+
+
+
+In this chapter, the methodology to ensure the integrity of the implementation has been explained. The following chapter talks about results of the analysis of the reconfigurable ICNs synthesized, and hence the efficiency of the synthesis algorithm as well as an analysis on the performance improvement provided by the FAA.

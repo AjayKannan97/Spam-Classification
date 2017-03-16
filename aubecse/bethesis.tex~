@@ -1,0 +1,58 @@
+\documentclass[a4paper,oneside,14pt]{memoir}
+\usepackage{aubecse}
+
+\settitle{My great latex thesis}
+\setnauthors{3}
+\setauthorone{Tom}
+\setauthortwo{Dick}
+\setauthorthree{Harry}
+\setregone{20xxxxxxx}
+\setregtwo{20xxxxxxx}
+\setregthree{20xxxxxxx}
+\setguide{John Guide}
+\setdesig{Professor}
+\bachelors % Bachelors of Engineering
+\university{Anna University}
+\setgraddate{May 2013}
+
+\begin{document}
+\frontmatter
+\thetitlepage
+\aucertification
+\input{./FrontMatter/ack}
+\input{./FrontMatter/abstract}
+
+%
+\tableofcontents*
+\listoffigures
+\listoftables
+\listofabbr
+
+\mainmatter
+\pagestyle{au}
+%\OnehalfSpacing
+\auSpacing  %% 0.8 cm using \baselineskip
+%\DoubleSpacing
+
+\input{./Chapters/Chapter1} % Introduction
+
+\input{./Chapters/Chapter2} % Literature Survey
+
+\input{./Chapters/Chapter3} % Design
+
+\input{./Chapters/Chapter4} % Implementation
+
+\input{./Chapters/Chapter5} % Testing
+
+\input{./Chapters/Chapter6} % Results
+
+\input{./Chapters/Chapter7} % Conclusion
+
+
+\appendix
+\input{./Appendices/AppendixA}	% 
+\backmatter
+\bibliographystyle{aubecse}
+\bibliography{bethesis}
+
+\end{document}

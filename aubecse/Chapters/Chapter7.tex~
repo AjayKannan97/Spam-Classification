@@ -1,0 +1,33 @@
+% Chapter 7
+
+\chapter{Conclusion} % Write in your own chapter title
+\label{Chapter7}
+\lhead{Chapter 7. \emph{Conclusion}} % Write in your own chapter title to set the page header
+
+\section{Contributions}
+In conclusion, this work deals with two approaches towards enhancing the performance of multicore systems and filesystems by exploiting reconfigurability.
+\begin{itemize}
+ \item \textbf{Exploiting reconfigurability in filesystems.} Our contribution is the idea of adding a dedicated reconfigurable hardware (Filesystem Access Accelerator) that can perform the filesystem's directory search operation faster than the software counterparts. We have illustrated the design of FAA for the \textit{ext2} file system and simulated the design using VHDL.
+
+ \item  \textbf{Analysis of reconfigurable interconnection networks.} This work contributes the following: 
+ \begin{enumerate}
+  \item Implementing the \textit{Tarjan Connected Components Algorithm} \cite{RICN_paper} which synthesizes a topology specific to an application's communication pattern.
+  \item A new interconnection network, omega network with various permutations has been added to Booksim.
+  \item Booksim has been extended to support non-synthetic traffic patterns which is required for analysis of the synthesized topology. 
+ \end{enumerate}
+   
+  The results obtained, corroborate the fact that, reconfigurable interconnection topologies specific to an application's communication pattern outperforms other standard topologies like torus, mesh and multi-stage networks like omega networks for smaller number of nodes.
+\end{itemize}
+
+\section{Future Work}
+
+\begin{itemize}
+\item \textbf{File Access Accelerator.} Extend the design to accomodate \textit{ext3} filesystems.
+
+\item \textbf{Reconfigurable ICN.} \begin{enumerate}
+\item Analyze the possibilities of the synthesized topologies of various algorithms converging into any particular pattern. This work will eventually lead to a design of an network topologies that works optimally for majority of parallel applications and significantly reduce the communication bottleneck.
+\item Address the scalability issue discovered in the reconfigurable topology synthesis algorithm.
+\end{enumerate}
+
+
+\end{itemize}
